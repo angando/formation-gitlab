@@ -1,5 +1,6 @@
 stages:
     - validate
+    - deploy_to_env_dev
 
 validate_playbooks:
     stage: validate
@@ -8,3 +9,16 @@ validate_playbooks:
         - devel
     script:
         - ansible-playbook --syntax-check  -i host_dev.ym configure_osfp_R1.yml configure_osfp_R2.yml
+
+
+deploy_to_dev:
+    stage: deploy_to_env_dev
+    image: kecorbin/ansible:devel
+    tags: 
+        - devel
+    script:
+        - ansible-playbook  -i host_dev.ym configure_osfp_R1.yml configure_osfp_R2.yml
+    environment: dev
+    only:
+         - master
+
