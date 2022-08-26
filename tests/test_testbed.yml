@@ -10,6 +10,7 @@ testbed:
 devices:
     ios-1: # <----- must match to your device hostname in the prompt
         os: ios
+        alias: R1
         type: ios
         connections:
 #           a:
@@ -20,6 +21,7 @@ devices:
                 protocol: ssh
                 ip: 192.168.1.102
     ios-2:
+        alias: R2
         os: ios
         type: ios
         connections:
