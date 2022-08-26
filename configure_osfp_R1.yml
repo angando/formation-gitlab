@@ -1,0 +1,47 @@
+---
+- name: configure Ospf R1 and R2
+  hosts: c3725-R1
+  gather_facts: no
+
+  pre_tasks:
+    - name: configure loopback0 in R1
+      ios_config:
+        lines:
+        - hostname {{ inventory_hostname }}
+        - interface loopback0
+        - ip address 1.1.1.1 255.255.255.255
+        - no shutdown
+        save_when: modified
+
+    - name: configure interface LAN R1
+      ios_config:
+        lines:
+        - interface fa2/0
+        - ip address 192.168.20.1 255.255.255.0
+        - description "LAN R1"
+        - no shutdown
+        save_when: modified
+
+    - name: configure interface WAN  for R2
+      ios_config:
+        lines:
+        - interface fa1/0
+        - ip address 103.200.1.1 255.255.255.252
+        - description "WAN1"
+        - no shutdown
+        save_when: modified
+
+  tasks:
+    - name: configuration OSPF in R1
+      ios_config:
+        lines:
+        - router ospf 1
+        - router-id 1.1.1.1
+        - network 103.200.1.0 0.0.0.3 area 0
+        - network 1.1.1.1 0.0.0.0 area 0
+        - network 192.168.20.0 0.0.0.255 area 0
+        - passive-interface fa2/0
+        parents: router ospf 1
+        save_when: modified
+
+
