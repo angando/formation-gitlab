@@ -18,7 +18,7 @@ devices:
 #                port: 11023
             vty:
                 protocol: ssh
-                ip: 5.5.5.5
+                ip: 192.168.1.102
     ios-2:
         os: ios
         type: ios
@@ -29,29 +29,29 @@ devices:
 #               port: 11024
             vty:
                 protocol: ssh
-                ip: 5.5.5.5
+                ip: 192.168.1.103
 topology:
     ios-1:
         interfaces:
-            GigabitEthernet0/0:
-                ipv4: 10.10.10.1/24
+            FastEthernet1/0:
+                ipv4: 103.200.1.1
 #               ipv6: '10:10:10::1/64'
                 link: link-1
                 type: ethernet
             Loopback0:
-                ipv4: 192.168.0.1/32
+                ipv4: 1.1.1.1/24
 #                ipv6: '192::1/128'
                 link: ios1_Loopback0
                 type: loopback
     ios-2:
         interfaces:
-            GigabitEthernet0/0:
-                ipv4: 10.10.10.2/24
+            FastEthernet1/0:
+                ipv4: 103.200.1.2/24
 #                ipv6: '10:10:10::2/64'
                 link: link-1
                 type: ethernet
             Loopback0:
-                ipv4: 192.168.0.2/32
+                ipv4: 2.2.2.2/24
 #                ipv6: '192::2/128'
                 link: ios2_Loopback0
                 type: loopback
