@@ -1,0 +1,10 @@
+stages:
+    - validate
+
+validate_playbooks:
+    stage: validate
+    image: kecorbin/ansible:devel
+    tags: 
+        - devel
+    script:
+        - ansible-playbook --syntax-check  -i host_dev.ym configure_osfp_R1.yml configure_osfp_R2.yml
