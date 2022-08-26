@@ -5,6 +5,8 @@ all:
      ansible_become: yes
      ansible_become_method: enable
  #    ansible_become_pass: cisco
+     ansible_become_pass: cisco
+     ansible_password: cisco
 
 #switchs:
 #   hosts:
