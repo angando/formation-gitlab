@@ -33,12 +33,12 @@ Common Setup
   run testcase    reachability.pyats_loopback_reachability.common_setup
 
 Capture Configuration
-    execute "show running-config" on device "dist1"
+    execute "show running-config" on device "R1"
 
 Ping
-    run testcase     reachability.pyats_loopback_reachability.PingTestcase    device=R1
-    run testcase     reachability.pyats_loopback_reachability.PingTestcase    device=R2
-#    run testcase     reachability.pyats_loopback_reachability.NxosPingTestcase    device=dist1
+    run testcase     reachability.pyats_loopback_reachability.PingTestcase        device=R1
+    run testcase     reachability.pyats_loopback_reachability.PingTestcase        device=R2
+#   run testcase     reachability.pyats_loopback_reachability.NxosPingTestcase    device=dist1
 #   run testcase     reachability.pyats_loopback_reachability.NxosPingTestcase    device=dist2
 
 # Verify OSPF neighbor counts
