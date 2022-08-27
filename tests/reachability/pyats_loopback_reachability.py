@@ -22,8 +22,8 @@ class common_setup(aetest.CommonSetup):
     @aetest.subsection
     def check_topology(self,
                        testbed,
-                       core1_name='core1',
-                       core2_name='core2'):
+                       R1_name='R1',
+                       cR2_name='R2'):
         '''
         check that we have at least two devices and a link between the devices
         If so, mark the next subsection for looping.
@@ -42,61 +42,66 @@ class common_setup(aetest.CommonSetup):
                                     ),
                             goto=['exit'])
 
-        core1 = testbed.devices[core1_name]
-        core2 = testbed.devices[core2_name]
-        dist1 = testbed.devices['dist1']
-        dist2 = testbed.devices['dist2']
-        access1 = testbed.devices['access1']
+        R1 = testbed.devices[R1_name]
+        R2 = testbed.devices[R2_name]
+       # dist1 = testbed.devices['dist1']
+       # dist2 = testbed.devices['dist2']
+       # access1 = testbed.devices['access1']
 
         # add them to testscript parameters
-        self.parent.parameters.update(core1=core1, core2=core2)
-        self.parent.parameters.update(dist1=dist1, dist2=dist2)
-        self.parent.parameters.update(access1=access1)
+        self.parent.parameters.update(R1=R1, R2=R2)
+        #self.parent.parameters.update(dist1=dist1, dist2=dist2)
+        #self.parent.parameters.update(access1=access1)
 
         # get corresponding links
-        links = core1.find_links(core2)
-        assert len(links) >= 1, 'require one link between core1 and core2'
+        links = R1.find_links(R2)
+        assert len(links) >= 1, 'require one link between R1 and R2'
 
         # save link as uut link parameter
         self.parent.parameters['uut_link'] = links.pop()
 
     @aetest.subsection
-    def establish_connections(self, steps, core1, core2,
-                              dist1, dist2, access1):
+    #def establish_connections(self, steps, core1, core2,
+    #                         dist1, dist2, access1):
+
+    def establish_connections(self, steps, R1, R2):
         '''
         establish connection to both devices
         '''
 
-        with steps.start('Connecting to core1'):
-            core1.connect()
+        with steps.start('Connecting to R1'):
+            R1.connect()
 
-        with steps.start('Connecting to core2'):
-            core2.connect()
+        with steps.start('Connecting to R2'):
+            R2.connect()
 
-        with steps.start('Connecting to dist1'):
-            dist1.connect()
+#        with steps.start('Connecting to dist1'):
+#            dist1.connect()
 
-        with steps.start('Connecting to dist2'):
-            dist2.connect()
+#        with steps.start('Connecting to dist2'):
+#            dist2.connect()
 
-        with steps.start('Connecting to access1'):
-            access1.connect()
+#        with steps.start('Connecting to access1'):
+#            access1.connect()
 
         # abort/fail the testscript if any device isn't connected
-        if not core1.connected or not core2.connected:
+        if not R1.connected or not R2.connected:
             self.failed('One of the devices could not be connected to',
                         goto=['exit'])
 
 
 # Ping Testcase: leverage dual-level looping
-@aetest.loop(device=('core1', 'core2'))
+@aetest.loop(device=('R1', 'R2'))
 class PingTestcase(aetest.Testcase):
     '''Ping test'''
 
     groups = ('basic', 'looping')
 
-    @aetest.test.loop(destination=('192.168.1.1', '192.168.1.2',
-                                   '192.168.0.1', '192.168.0.2'))
+#    @aetest.test.loop(destination=('192.168.1.1', '192.168.1.2',
+#                                   '192.168.0.1', '192.168.0.2'))
+
+    @aetest.test.loop(destination=('192.168.1.102', '192.168.1.103'))
+ #                                  ,'192.168.0.1', '192.168.0.2'))
     def ping(self, device, destination):
         '''
         ping destination ip address from device
@@ -143,14 +148,16 @@ class PingTestcase(aetest.Testcase):
 
 # Ping Testcase: leverage dual-level looping
 
-@aetest.loop(device=('dist1', 'dist2'))
+@aetest.loop(device=('R1', 'R2'))
 class NxosPingTestcase(aetest.Testcase):
     '''Ping test'''
 
     groups = ('basic', 'looping')
 
-    @aetest.test.loop(destination=('192.168.1.1', '192.168.1.2',
-                                   '192.168.0.1', '192.168.0.2'))
+#    @aetest.test.loop(destination=('192.168.1.1', '192.168.1.2',
+#                                   '192.168.0.1', '192.168.0.2'))
+
+    @aetest.test.loop(destination=('192.168.1.102', '192.168.1.103'))
     def ping(self, device, destination):
         '''
         ping destination ip address from device
@@ -206,33 +213,37 @@ class common_cleanup(aetest.CommonCleanup):
     '''disconnect from ios routers'''
 
     @aetest.subsection
-    def disconnect(self, steps, core1, core2, dist1, dist2, access1):
+
+    def disconnect(self, steps, R1, R2):
         '''disconnect from both devices'''
 
-        with steps.start('Disconnecting from core1'):
+#    def disconnect(self, steps, core1, core2, dist1, dist2, access1):
+#        '''disconnect from both devices'''
+
+        with steps.start('Disconnecting from R1'):
             core1.disconnect()
 
-        with steps.start('Disconnecting from core2'):
-            core2.disconnect()
+        with steps.start('Disconnecting from R2'):
+            R2.disconnect()
 
-        if core1.connected or core2.connected:
+        if R1.connected or R1.connected:
             # abort/fail the testscript if device connection still exists
             self.failed('One of the devices could not be disconnected from',
                         goto=['exit'])
 
-        with steps.start('Disconnecting from dist1'):
-            dist1.disconnect()
+        with steps.start('Disconnecting from R1'):
+            R1.disconnect()
 
-        with steps.start('Disconnecting from dist2'):
-            dist2.disconnect()
+        with steps.start('Disconnecting from R2'):
+            R2.disconnect()
 
-        if dist1.connected or dist2.connected:
+        if R1.connected or R2.connected:
             # abort/fail the testscript if device connection still exists
             self.failed('One of the devices could not be disconnected from',
                         goto=['exit'])
 
-        with steps.start('Disconnecting from access1'):
-            access1.disconnect()
+#        with steps.start('Disconnecting from access1'):
+#            access1.disconnect()
 
 
 if __name__ == '__main__':
