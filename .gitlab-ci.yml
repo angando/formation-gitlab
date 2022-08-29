@@ -20,6 +20,7 @@ stages:
     tags: 
         - devel
     script:
+        - echo "Deploy to dev env"
         - ansible-playbook  -i host_dev.yml configure_osfp_R1.yml
         - ansible-playbook  -i host_dev.yml configure_osfp_R2.yml
 
