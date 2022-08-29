@@ -1,0 +1,14 @@
+---
+- name: Save Logs ospf with pyATS
+  hosts: c3725
+  connection: network_cli
+  gather_facts: no
+  roles:
+    - role: 'roles/ansible-pyats'
+  tasks:
+    - include_role:
+        name: ansible-pyats
+        tasks_from: snapshot_command
+      vars:
+        command: show ip ospf neighbor
+        file: "logs/{{ inventory_hostname }}_ospf.json"
