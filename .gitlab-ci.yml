@@ -72,8 +72,8 @@ deploy_to_prod:
         name: production
     only:
         - master
-    when: manual
-    allow_failure: false
+    #when: manual
+    allow_failure: true
     only:
     - master
 
