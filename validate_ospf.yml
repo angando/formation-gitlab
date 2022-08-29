@@ -1,0 +1,14 @@
+---
+- name: Validate Ospf with pyATS
+  hosts: c3725
+  connection: network_cli
+  gather_facts: no
+  roles:
+    - role: 'roles/ansible-pyats'
+  tasks:
+    - pyats_parse_command:
+        command: show ip route bgp
+      register: output
+
+    - debug:
+        var: output.structured
