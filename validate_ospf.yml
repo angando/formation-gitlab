@@ -7,11 +7,11 @@
     - role: 'roles/ansible-pyats'
   tasks:
 
-    - name: mise à jour des process id
-      ios_command:
-        commands: 'clear ip osfp process'
-        prompt: 'Reset ALL OSPF processes? \[no\]:'
-        answer: 'y'
+    #- name: mise à jour des process id
+    #  ios_command:
+    #    commands: 'clear ip osfp process'
+    #    prompt: 'Reset ALL OSPF processes? \[no\]:'
+    #   answer: 'y'
         
        
     - pyats_parse_command:
