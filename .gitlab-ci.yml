@@ -103,5 +103,3 @@ validate_prod_environment:
         paths:
             - ./logs/c3725-R1_ospf.json
             - ./logs/c3725-R2_ospf.json
-
-
