@@ -11,7 +11,7 @@ validate_playbooks:
     tags: 
         - devel
     script:
-        - rm logs/*
+
         - ansible-playbook --syntax-check  -i host_dev.yml configure_osfp_R1.yml configure_osfp_R2.yml
 
 
