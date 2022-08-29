@@ -71,11 +71,11 @@ deploy_to_prod:
     environment:
         name: production
     only:
-        - production
+        - master
     when: manual
     allow_failure: false
     only:
-    - production
+    - master
 
 validate_prod_environment:
     
@@ -86,7 +86,7 @@ validate_prod_environment:
     dependencies:
         - deploy_to_prod
     only:
-        - production
+        - master
 
     script:
         - export ANSIBLE_HOST_KEY_CHECKING=False
