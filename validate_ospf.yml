@@ -6,6 +6,11 @@
   roles:
     - role: 'roles/ansible-pyats'
   tasks:
+
+    - name: mise à jour des process id
+       ios_command:
+       - clear ip osfp process
+       
     - pyats_parse_command:
         command: show ip ospf neighbor
       register: output
