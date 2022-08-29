@@ -22,6 +22,7 @@ deploy_to_dev:
     script:
         - ansible-playbook  -i host_dev.yml configure_osfp_R1.yml
         - ansible-playbook  -i host_dev.yml configure_osfp_R2.yml
+        - sleep 30
 
     environment: 
         name: DEV_TEST
@@ -69,6 +70,7 @@ deploy_to_prod:
         - ansible-playbook --syntax-check  -i hosts_prod.yml configure_osfp_R1.yml configure_osfp_R2.yml
         - ansible-playbook   -i hosts_prod.yml configure_osfp_R1.yml
         - ansible-playbook   -i hosts_prod.yml configure_osfp_R2.yml
+        - sleep 30
         
     environment:
         name: production
