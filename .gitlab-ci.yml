@@ -5,7 +5,7 @@ stages:
     - deploy_to_prod
     - verify_deploy_to_prod
 
-.validate_playbooks:
+validate_playbooks:
     stage: validate
     image: kecorbin/ansible:devel
     tags: 
@@ -14,7 +14,7 @@ stages:
         - ansible-playbook --syntax-check  -i host_dev.yml configure_osfp_R1.yml configure_osfp_R2.yml
 
 
-.deploy_to_dev:
+deploy_to_dev:
     stage: deploy_to_env_dev
     image: kecorbin/ansible:devel
     tags: 
@@ -28,7 +28,7 @@ stages:
     only:
         - master
 
-.validate_dev_environment:
+validate_dev_environment:
     stage: validate_dev_environment
     image: ciscotestautomation/pyats:latest-robot
     tags: 
