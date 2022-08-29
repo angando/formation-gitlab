@@ -5,7 +5,7 @@ stages:
     - deploy_to_prod
     - verify_deploy_to_prod
 
-validate_playbooks:
+.validate_playbooks:
     stage: validate
     image: kecorbin/ansible:devel
     tags: 
@@ -14,7 +14,7 @@ validate_playbooks:
         - ansible-playbook --syntax-check  -i host_dev.yml configure_osfp_R1.yml configure_osfp_R2.yml
 
 
-deploy_to_dev:
+.deploy_to_dev:
     stage: deploy_to_env_dev
     image: kecorbin/ansible:devel
     tags: 
@@ -28,7 +28,7 @@ deploy_to_dev:
     only:
         - master
 
-validate_dev_environment:
+.validate_dev_environment:
     stage: validate_dev_environment
     image: ciscotestautomation/pyats:latest-robot
     tags: 
@@ -55,8 +55,6 @@ validate_dev_environment:
             - ./logs/c3725-R1_ospf.json
             - ./logs/c3725-R2_ospf.json
 
-############# validate prod invironmment
-
 deploy_to_prod:
     image: kecorbin/ansible:devel
     stage: deploy_to_prod
@@ -66,6 +64,7 @@ deploy_to_prod:
         - echo "Deploy to prod env"
         - ansible-playbook --syntax-check  -i hosts_prod.yml configure_osfp_R1.yml configure_osfp_R2.yml
         - ansible-playbook -i hosts_prod.yml configure_osfp_R1.yml configure_osfp_R2.yml
+
     environment:
         name: production
     only:
@@ -75,8 +74,7 @@ deploy_to_prod:
     only:
     - production
 
-validate_prod_environment:
-    
+validate_prod_environment:    
     image: ciscotestautomation/pyats:latest-robot
     stage: verify_deploy_to_prod
     tags:
@@ -101,3 +99,5 @@ validate_prod_environment:
         paths:
             - ./logs/c3725-R1_ospf.json
             - ./logs/c3725-R2_ospf.json
+
+
