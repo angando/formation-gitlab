@@ -9,7 +9,7 @@
         lines:
         - hostname {{ inventory_hostname }}
         - interface loopback0
-        - ip address 1.1.1.1 255.255.255.255
+        - ip address 5.5.5.5 255.255.255.255
         - no shutdown
         save_when: modified
 
