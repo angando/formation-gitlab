@@ -66,6 +66,10 @@ deploy_to_prod:
     tags: 
         - devel
     script:
+        - pwd
+        - ls
+        - cd logs
+        - cat c3725-R2_ospf.json
         - echo "Deploy to prod env"
         - ansible-playbook --syntax-check  -i hosts_prod.yml configure_osfp_R1.yml configure_osfp_R2.yml
         - ansible-playbook   -i hosts_prod.yml configure_osfp_R1.yml
@@ -100,7 +104,6 @@ validate_prod_environment:
         - sleep 5
         - ansible-playbook -i hosts_prod.yml compare_ospf.yml 
         - ansible-playbook -i hosts_prod.yml  save_logs_ospf.yml
-        
         - ls logs/
 
     artifacts:
