@@ -7,7 +7,7 @@
     - role: 'roles/ansible-pyats'
   tasks:
     - pyats_parse_command:
-        command: show ip route bgp
+        command: show ip ospf neighbor
       register: output
 
     - debug:
