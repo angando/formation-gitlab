@@ -22,7 +22,6 @@ deploy_to_dev:
     script:
         - ansible-playbook  -i host_dev.yml configure_osfp_R1.yml
         - ansible-playbook  -i host_dev.yml configure_osfp_R2.yml
-        - sleep 30
 
     environment: 
         name: DEV_TEST
@@ -41,6 +40,7 @@ validate_dev_environment:
         - python3 -m pip install ansible
         - ansible-galaxy install -r requirements.yml -p "${ANSIBLE_ROLES_PATH:-roles}"
         - ansible-playbook --syntax-check  -i host_dev.yml validate_ospf.yml save_logs_ospf.yml
+        - sleep 60
         - ansible-playbook -i host_dev.yml validate_ospf.yml
         - ansible-playbook -i host_dev.yml  save_logs_ospf.yml 
         - ls logs/
@@ -97,6 +97,7 @@ validate_prod_environment:
         - python3 -m pip install ansible
         - ansible-galaxy install -r requirements.yml -p "${ANSIBLE_ROLES_PATH:-roles}"
         - ansible-playbook --syntax-check  -i hosts_prod.yml validate_ospf.yml save_logs_ospf.yml
+        - sleep 60
         - ansible-playbook -i hosts_prod.yml validate_ospf.yml
         - ansible-playbook -i hosts_prod.yml  save_logs_ospf.yml 
         - ls logs/
