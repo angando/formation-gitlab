@@ -73,6 +73,6 @@ deploy_to_prod:
     when: manual
     allow_failure: false
     only:
-    - production
+    - master
 
 
