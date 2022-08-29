@@ -9,4 +9,4 @@
         tasks_from: compare_command
       vars:
         command: show ip ospf nei
-        file: "{{ inventory_hostname }}_routes.json"
+        file: "logs/{{ inventory_hostname }}_ospf.json"
