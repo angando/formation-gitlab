@@ -67,7 +67,9 @@ deploy_to_prod:
     script:
         - echo "Deploy to prod env"
         - ansible-playbook --syntax-check  -i hosts_prod.yml configure_osfp_R1.yml configure_osfp_R2.yml
-        - ansible-playbook   -i hosts_prod.yml configure_osfp_R1.yml configure_osfp_R2.yml
+        - ansible-playbook   -i hosts_prod.yml configure_osfp_R1.yml
+        - ansible-playbook   -i hosts_prod.yml configure_osfp_R2.yml
+        
     environment:
         name: production
     only:
