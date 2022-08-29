@@ -9,8 +9,10 @@
 
     - name: mise à jour des process id
       ios_command:
-        commands:
-        - clear ip osfp process
+        commands: 'clear ip osfp process'
+        prompt: 'Reset ALL OSPF processes? \[no\]:'
+        answer: 'y'
+        
        
     - pyats_parse_command:
         command: show ip ospf neighbor
