@@ -1,5 +1,5 @@
 ---
-- name: configure Ospf R1 and R2
+- name: configure Ospf R1
   hosts: c3725-R1
   gather_facts: no
 
