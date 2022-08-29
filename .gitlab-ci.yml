@@ -3,7 +3,7 @@ stages:
     - deploy_to_env_dev
     - validate_dev_environment
     - deploy_to_prod
-
+    - verify_deploy_to_prod
 
 .validate_playbooks:
     stage: validate
@@ -20,7 +20,6 @@ stages:
     tags: 
         - devel
     script:
-        - echo "Deploy to dev env"
         - ansible-playbook  -i host_dev.yml configure_osfp_R1.yml
         - ansible-playbook  -i host_dev.yml configure_osfp_R2.yml
 
@@ -35,6 +34,7 @@ stages:
     tags: 
         - pyats
   
+
     script:
         - export ANSIBLE_HOST_KEY_CHECKING=False
         - python3 -m pip install ansible
@@ -49,12 +49,15 @@ stages:
     only:
         - master      
 
+
     artifacts:
         name: "pyats_logs_${CI_JOB_NAME}_${CI_COMMIT_REF_NAME}_${CI_COMMIT_SHORT_SHA}"
         when: always
         paths:
             - ./logs/c3725-R1_ospf.json
             - ./logs/c3725-R2_ospf.json
+
+############# validate prod invironmment
 
 deploy_to_prod:
     image: kecorbin/ansible:devel
@@ -64,7 +67,41 @@ deploy_to_prod:
     script:
         - echo "Deploy to prod env"
         - ansible-playbook --syntax-check  -i hosts_prod.yml configure_osfp_R1.yml configure_osfp_R2.yml
-        - ansible-playbook -i hosts_prod.yml configure_osfp_R1.yml configure_osfp_R2.yml
+        - ansible-playbook   -i hosts_prod.yml configure_osfp_R1.yml configure_osfp_R2.yml
+    environment:
+        name: production
+    only:
+        - production
+    when: manual
+    allow_failure: false
+    only:
+    - production
 
+validate_prod_environment:
+    
+    image: ciscotestautomation/pyats:latest-robot
+    stage: verify_deploy_to_prod
+    tags:
+        - pyats
+    dependencies:
+        - deploy_to_prod
+    only:
+        - production
+
+    script:
+        - export ANSIBLE_HOST_KEY_CHECKING=False
+        - python3 -m pip install ansible
+        - ansible-galaxy install -r requirements.yml -p "${ANSIBLE_ROLES_PATH:-roles}"
+        - ansible-playbook --syntax-check  -i hosts_prod.yml validate_ospf.yml save_logs_ospf.yml
+        - ansible-playbook -i hosts_prod.yml validate_ospf.yml
+        - ansible-playbook -i hosts_prod.yml  save_logs_ospf.yml 
+        - ls logs/
+
+    artifacts:
+        name: "pyats_logs_${CI_JOB_NAME}_${CI_COMMIT_REF_NAME}_${CI_COMMIT_SHORT_SHA}"
+        when: always
+        paths:
+            - ./logs/c3725-R1_ospf.json
+            - ./logs/c3725-R2_ospf.json
 
 
