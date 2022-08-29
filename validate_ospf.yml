@@ -8,8 +8,9 @@
   tasks:
 
     - name: mise à jour des process id
-       ios_command:
-       - clear ip osfp process
+      ios_command:
+        commands:
+        - clear ip osfp process
        
     - pyats_parse_command:
         command: show ip ospf neighbor
