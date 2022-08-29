@@ -5,7 +5,7 @@ stages:
     - deploy_to_prod
     - verify_deploy_to_prod
 
-validate_playbooks:
+.validate_playbooks:
     stage: validate
     image: kecorbin/ansible:devel
     tags: 
